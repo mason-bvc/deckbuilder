@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Deck Builder.sln"
+    "dotnet.defaultSolution": "Deck Builder.sln",
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "editor.trimAutoWhitespace": true
 }
