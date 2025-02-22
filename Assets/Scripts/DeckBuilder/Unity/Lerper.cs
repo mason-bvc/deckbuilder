@@ -4,38 +4,36 @@ using UnityEngine;
 
 namespace DeckBuilder.Unity
 {
+    public enum LerperState
+    {
+        NotYetStarted,
+        Running,
+        Finished,
+    }
+
     public class Lerper : MonoBehaviour
     {
-        public enum State
-        {
-            Uninitialized,
-            Initialized,
-            Running,
-            Finished,
-        }
-
         public Func<float, float, float, float> LerpFunction = Mathf.Lerp;
         public Func<float> GetterFunction;
         public Action<float> SetterFunction;
         public float From;
         public float To;
-        public State CurrentState;
+        public LerperState CurrentState;
         public float CurrentT;
-        public float CurrentValue;
         public float DurationSeconds;
 
         #region Unity Messages
 
         public void Update()
         {
-            if (CurrentState == State.Running)
+            if (CurrentState == LerperState.Running)
             {
                 CurrentT += Time.deltaTime / DurationSeconds;
                 SetterFunction(LerpFunction(From, To, CurrentT));
 
                 if (CurrentT >= 1.0F)
                 {
-                    CurrentState = State.Finished;
+                    CurrentState = LerperState.Finished;
                 }
             }
         }
@@ -65,7 +63,8 @@ namespace DeckBuilder.Unity
             From = from;
             To = to;
             DurationSeconds = durationSeconds;
-            CurrentState = State.Running;
+            CurrentState = LerperState.Running;
+            CurrentT = 0;
 
             return this;
         }
@@ -74,7 +73,7 @@ namespace DeckBuilder.Unity
         {
             await Task.Run(() =>
             {
-                while (CurrentState != State.Finished) ;
+                while (CurrentState != LerperState.Finished) ;
             });
         }
     }

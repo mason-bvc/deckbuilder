@@ -9,6 +9,22 @@ namespace DeckBuilder.Unity
 {
     public static class AssetManager
     {
+        public enum AudioClipName
+        {
+            Card,
+            BackgroundMusic,
+        }
+
+        public enum PrefabName
+        {
+            Card,
+        }
+
+        public enum SpriteName
+        {
+            CardBackside,
+        }
+
         public class LoadSpriteException : Exception
         {
             public LoadSpriteException() { }
@@ -18,19 +34,19 @@ namespace DeckBuilder.Unity
         private const string PREFABS_BASE_PATH = "Prefabs/";
         private const string CARD_SPRITE_BASE_PATH = "Textures/Cards/";
 
+        public static readonly AudioClip[] AudioClips = new AudioClip[Enum.GetValues(typeof(AudioClipName)).Length];
+        public static readonly GameObject[] Prefabs = new GameObject[Enum.GetValues(typeof(PrefabName)).Length];
+        public static readonly Sprite[] Sprites = new Sprite[Enum.GetValues(typeof(SpriteName)).Length];
         public static IReadOnlyDictionary<CardType, Sprite> CardSprites => _cardSprites;
-        public static Sprite? CardBacksideSprite { get; private set; }
-        public static GameObject? CardPrefab { get; private set; }
 
         private static readonly Dictionary<CardType, Sprite> _cardSprites = new();
-
         private static readonly StringBuilder _assetPathStringBuilder = new();
         private static readonly StringBuilder _loadAllCardSpritesStringBuilder = new();
 
         public static void LoadAndCacheAllAssets()
         {
-            CardBacksideSprite = Resources.Load<Sprite>(CARD_SPRITE_BASE_PATH + "card_back_red");
-            CardPrefab = Resources.Load<GameObject>(PREFABS_BASE_PATH + "Card");
+            Sprites[(int)SpriteName.CardBackside] = Resources.Load<Sprite>(CARD_SPRITE_BASE_PATH + "card_back_red");
+            Prefabs[(int)PrefabName.Card] = Resources.Load<GameObject>(PREFABS_BASE_PATH + "Card");
             LoadAndCacheAllCardSprites();
         }
 
