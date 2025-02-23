@@ -1,3 +1,4 @@
+using Belmondo;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace DeckBuilder.Unity
         private Transform _playerOneHandOrigin;
         private Transform _playerTwoHandOrigin;
         private TMP_Text _phaseText;
+        private TweenerBuilder<Vector2> _phaseTextPositionTweener;
 
         #region Unity Messages
 
@@ -28,6 +30,13 @@ namespace DeckBuilder.Unity
             _playerOneHandOrigin = transform.Find("PlayerOneHandOrigin");
             _playerTwoHandOrigin = transform.Find("PlayerTwoHandOrigin");
             _phaseText = transform.Find("Canvas/PhaseText").GetComponent<TMP_Text>();
+            SetUpBoard();
+        }
+
+        #endregion Unity Messages
+
+        public void SetUpBoard()
+        {
             _game.Begin();
 
             int cardCount = _game.PlayerOne.Hand.Cards.Count;
@@ -43,7 +52,5 @@ namespace DeckBuilder.Unity
                 cardInstance.transform.Translate(Vector3.right * Mathf.Lerp(-HALF_HAND_SPAN, HALF_HAND_SPAN, i / (float)(cardCount - 1)), Space.World);
             }
         }
-
-        #endregion Unity Messages
     }
 }
