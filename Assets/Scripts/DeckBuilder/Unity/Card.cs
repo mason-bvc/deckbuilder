@@ -1,6 +1,7 @@
-using UnityEngine;
+using System;
 using System.Threading.Tasks;
 using Belmondo;
+using UnityEngine;
 
 namespace DeckBuilder.Unity
 {
@@ -12,11 +13,17 @@ namespace DeckBuilder.Unity
 
     public class Card : MonoBehaviour
     {
+        [HideInInspector]
         public AudioSource AudioSource;
+        [HideInInspector]
         public EventBroadcaster EventBroadcaster;
+        [HideInInspector]
         public Transform Leaf;
+        [HideInInspector]
         public Transform SelectTransform;
-        public Tween<Vector2> SelectTransformTweener;
+        [HideInInspector]
+        public Tween<float> SelectTransformTween;
+        [HideInInspector]
         public CardState State;
 
         #region Unity Messages
@@ -36,15 +43,6 @@ namespace DeckBuilder.Unity
         {
             if (State == CardState.Idle)
             {
-                await SelectTransformTweener.Run(Vector2.zero, Vector2.up, 0.25F);
-
-                // await Tweener
-                //     .SetLerpFunction((out float value, float from, float to, float t) =>
-                //     {
-                //         value = EasingFunction.EaseInOutCubic(from, to, t);
-                //     })
-                //     .Begin(SelectTransform.localPosition.y, 1, 0.25F)
-                //     .Finished();
             }
             else if (State == CardState.Selected)
             {
@@ -59,7 +57,8 @@ namespace DeckBuilder.Unity
 
         private void OnMouseDownOnLeaf()
         {
-            SetState(State switch {
+            SetState(State switch
+            {
                 CardState.Idle => CardState.Selected,
                 CardState.Selected => CardState.Idle,
                 _ => CardState.Idle,

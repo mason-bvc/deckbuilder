@@ -178,7 +178,6 @@ GameObject:
   - component: {fileID: 287634430}
   - component: {fileID: 287634432}
   - component: {fileID: 287634431}
-  - component: {fileID: 287634433}
   m_Layer: 0
   m_Name: PhaseText
   m_TagString: Untagged
@@ -304,23 +303,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 287634429}
   m_CullTransparentMesh: 1
---- !u!114 &287634433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287634429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0aace6bac38a7d4793943ca3e63cb34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  From: 0
-  To: 0
-  CurrentState: 0
-  CurrentT: 0
-  DurationSeconds: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

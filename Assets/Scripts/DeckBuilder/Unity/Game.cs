@@ -15,7 +15,6 @@ namespace DeckBuilder.Unity
         private Transform _playerOneHandOrigin;
         private Transform _playerTwoHandOrigin;
         private TMP_Text _phaseText;
-        private TweenerBuilder<Vector2> _phaseTextPositionTweener;
 
         #region Unity Messages
 

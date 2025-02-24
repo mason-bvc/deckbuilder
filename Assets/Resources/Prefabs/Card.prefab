@@ -192,7 +192,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7090163298755926112}
   - component: {fileID: 5061491544292576899}
-  - component: {fileID: -9114617791591105890}
   - component: {fileID: 6755469411690201472}
   m_Layer: 0
   m_Name: Card
@@ -229,28 +228,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a8842b427fa3d4180974a4403a8030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  State: 0
-  Lerper: {fileID: 0}
-  SelectTransform: {fileID: 0}
-  Leaf: {fileID: 0}
+  AudioSource: {fileID: 0}
   EventBroadcaster: {fileID: 0}
---- !u!114 &-9114617791591105890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9214474934834553577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0aace6bac38a7d4793943ca3e63cb34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  From: 0
-  To: 0
-  CurrentState: 0
-  CurrentT: 0
-  DurationSeconds: 0
+  Leaf: {fileID: 0}
+  SelectTransform: {fileID: 0}
+  State: 0
 --- !u!82 &6755469411690201472
 AudioSource:
   m_ObjectHideFlags: 0
