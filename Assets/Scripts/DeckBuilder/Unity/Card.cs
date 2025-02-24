@@ -1,5 +1,93 @@
+/*
 using System;
-using System.Threading.Tasks;
+using Belmondo;
+using UnityEngine;
+using UnityEngine.Events;
+
+namespace DeckBuilder.Unity
+{
+    public enum CardState
+    {
+        Idle,
+        Selected,
+    }
+
+    public class Card : MonoBehaviour
+    {
+        public readonly UnityEvent Selected;
+        public readonly UnityEvent Deselected;
+
+        [HideInInspector]
+        public AudioSource AudioSource;
+        [HideInInspector]
+        public EventBroadcaster EventBroadcaster;
+        [HideInInspector]
+        public Transform Leaf;
+        [HideInInspector]
+        public Transform SelectTransform;
+        [HideInInspector]
+        public Tween<float> SelectTransformTween = new();
+        [HideInInspector]
+        public CardType CardType;
+        [HideInInspector]
+        public CardState State;
+
+        #region Unity Messages
+
+        public void Awake()
+        {
+            AudioSource = GetComponent<AudioSource>();
+            SelectTransform = transform.Find("SelectTransform");
+            SelectTransformTween
+                .SetLerpDelegate(EasingFunction.EaseInOutCubic)
+                .SetSetterDelegate(y => SelectTransform.localPosition = Vector2.up * y);
+            Leaf = SelectTransform.Find("Leaf");
+            EventBroadcaster = Leaf.GetComponent<EventBroadcaster>();
+            EventBroadcaster.MouseDown.AddListener(OnMouseDownOnLeaf);
+        }
+
+        public void Update()
+        {
+            SelectTransformTween.Update(TimeSpan.FromSeconds(Time.deltaTime));
+        }
+
+        #endregion Unity Messages
+
+        public async void SetState(CardState state)
+        {
+            if (SelectTransformTween.Status == TweenStatus.Running)
+            {
+                return;
+            }
+
+            if (State == CardState.Idle)
+            {
+                await SelectTransformTween
+                    .Run(0, 1, TimeSpan.FromSeconds(0.25));
+            }
+            else if (State == CardState.Selected)
+            {
+                await SelectTransformTween
+                    .Run(SelectTransform.localPosition.y, 0, TimeSpan.FromSeconds(0.25));
+            }
+
+            State = state;
+        }
+
+        private void OnMouseDownOnLeaf()
+        {
+            SetState(State switch
+            {
+                CardState.Idle => CardState.Selected,
+                CardState.Selected => CardState.Idle,
+                _ => CardState.Idle,
+            });
+        }
+    }
+}
+*/
+
+using System;
 using Belmondo;
 using UnityEngine;
 
@@ -22,7 +110,9 @@ namespace DeckBuilder.Unity
         [HideInInspector]
         public Transform SelectTransform;
         [HideInInspector]
-        public Tween<float> SelectTransformTween;
+        public Tween<float> SelectTransformTween = new();
+        [HideInInspector]
+        public CardType CardType;
         [HideInInspector]
         public CardState State;
 
@@ -32,24 +122,40 @@ namespace DeckBuilder.Unity
         {
             AudioSource = GetComponent<AudioSource>();
             SelectTransform = transform.Find("SelectTransform");
+            SelectTransformTween
+                .SetLerpDelegate(EasingFunction.EaseInOutCubic)
+                .SetSetterDelegate(y => SelectTransform.localPosition = Vector2.up * y);
+            SelectTransformTween
+                .SetLerpDelegate(EasingFunction.EaseInOutCubic)
+                .SetSetterDelegate(y => SelectTransform.localPosition = Vector2.up * y);
             Leaf = SelectTransform.Find("Leaf");
             EventBroadcaster = Leaf.GetComponent<EventBroadcaster>();
             EventBroadcaster.MouseDown.AddListener(OnMouseDownOnLeaf);
+        }
+
+        public void Update()
+        {
+            SelectTransformTween.Update(TimeSpan.FromSeconds(Time.deltaTime));
         }
 
         #endregion Unity Messages
 
         public async void SetState(CardState state)
         {
+            if (SelectTransformTween.Status == TweenStatus.Running)
+            {
+                return;
+            }
+
             if (State == CardState.Idle)
             {
+                await SelectTransformTween
+                    .Run(0, 1, TimeSpan.FromSeconds(0.25));
             }
             else if (State == CardState.Selected)
             {
-                // await Tweener
-                //     .SetLerpFunction(EasingFunction.EaseOutCubic)
-                //     .Begin(SelectTransform.localPosition.y, 0, 0.25F)
-                //     .Finished();
+                await SelectTransformTween
+                    .Run(SelectTransform.localPosition.y, 0, TimeSpan.FromSeconds(0.25));
             }
 
             State = state;
