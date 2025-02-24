@@ -4,11 +4,11 @@ namespace DeckBuilder
 {
     public struct Hand
     {
-        public IList<CardType> Cards;
+        public IList<HeldCard> Cards;
 
-        public void Initialize(IList<CardType> cardList)
+        public void Initialize(IList<HeldCard> freshList)
         {
-            Cards = cardList;
+            Cards = freshList;
         }
     }
 }

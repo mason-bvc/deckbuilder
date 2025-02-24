@@ -26,7 +26,7 @@ namespace DeckBuilder
         private readonly void InitializePlayer(ref Player player)
         {
             player.Deck.Initialize(new List<CardType>());
-            player.Hand.Initialize(new List<CardType>());
+            player.Hand.Initialize(new List<HeldCard>());
             Deck.PushFullDeckInto(player.Deck.Cards);
         }
     }

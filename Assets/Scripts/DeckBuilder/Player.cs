@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace DeckBuilder
 {
     public struct Player
@@ -11,6 +14,14 @@ namespace DeckBuilder
             Hand = hand;
         }
 
-        public readonly void DrawFromDeckIntoHand(int count) => Deck.Draw(count, Hand.Cards);
+        public void DrawFromDeckIntoHand(int count)
+        {
+            List<CardType> drawnCards = new();
+            List<HeldCard> nowHeldCards;
+
+            Deck.Draw(count, drawnCards);
+            nowHeldCards = drawnCards.Select(cardType => new HeldCard(cardType)).ToList();
+            Hand.Cards = Hand.Cards.Concat(nowHeldCards).ToList();
+        }
     }
 }

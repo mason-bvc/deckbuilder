@@ -1,3 +1,4 @@
+using System.Linq;
 using Belmondo;
 using TMPro;
 using UnityEngine;
@@ -42,14 +43,24 @@ namespace DeckBuilder.Unity
 
             for (int i = 0; i < cardCount; i++)
             {
-                CardType cardType = _game.PlayerOne.Hand.Cards[i];
+                HeldCard heldCard = _game.PlayerOne.Hand.Cards[i];
                 GameObject cardInstance = Instantiate(AssetManager.Prefabs[(int)AssetManager.PrefabName.Card], _playerOneHandOrigin);
                 Card cardComponent = cardInstance.GetComponent<Card>();
                 SpriteRenderer cardSpriteRenderer = cardComponent.Leaf.GetComponent<SpriteRenderer>();
 
-                cardSpriteRenderer.sprite = AssetManager.CardSprites[cardType];
+                cardComponent.Selected.AddListener(OnCardSelected);
+                cardSpriteRenderer.sprite = AssetManager.CardSprites[heldCard.CardType];
                 cardInstance.transform.Translate(Vector3.right * Mathf.Lerp(-HALF_HAND_SPAN, HALF_HAND_SPAN, i / (float)(cardCount - 1)), Space.World);
             }
+        }
+
+        private void OnCardSelected(Card card)
+        {
+            card.HeldCard.IsSelected = true;
+            // if Hand.Cards is a list and not an OrderedDictionary,
+            // this incurrs a O(n) cost but because n is likely 5 it shouldn't
+            // matter.
+            _game.PlayerOne.Hand.Cards.Contains((HeldCard)card.HeldCard.CardType);
         }
     }
 }

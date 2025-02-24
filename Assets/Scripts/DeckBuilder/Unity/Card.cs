@@ -1,6 +1,7 @@
 using System;
 using Belmondo;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DeckBuilder.Unity
 {
@@ -12,6 +13,9 @@ namespace DeckBuilder.Unity
 
     public class Card : MonoBehaviour
     {
+        public readonly UnityEvent<Card> Selected = new();
+        public readonly UnityEvent<Card> Deselected = new();
+
         [HideInInspector]
         public AudioSource AudioSource;
         [HideInInspector]
@@ -23,7 +27,7 @@ namespace DeckBuilder.Unity
         [HideInInspector]
         public Tween<float> SelectTransformTween = new();
         [HideInInspector]
-        public CardType CardType;
+        public HeldCard HeldCard;
         [HideInInspector]
         public CardState State;
 
@@ -60,11 +64,15 @@ namespace DeckBuilder.Unity
 
             if (State == CardState.Idle)
             {
+                Selected.Invoke(this);
+
                 await SelectTransformTween
                     .Run(0, 1, TimeSpan.FromSeconds(0.25));
             }
             else if (State == CardState.Selected)
             {
+                Deselected.Invoke(this);
+
                 await SelectTransformTween
                     .Run(SelectTransform.localPosition.y, 0, TimeSpan.FromSeconds(0.25));
             }
