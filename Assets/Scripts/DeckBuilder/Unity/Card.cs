@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Threading.Tasks;
+using Belmondo;
 
 namespace DeckBuilder.Unity
 {
@@ -13,8 +15,8 @@ namespace DeckBuilder.Unity
         public AudioSource AudioSource;
         public EventBroadcaster EventBroadcaster;
         public Transform Leaf;
-        public Lerper Lerper;
         public Transform SelectTransform;
+        public Tween<Vector2> SelectTransformTweener;
         public CardState State;
 
         #region Unity Messages
@@ -26,7 +28,6 @@ namespace DeckBuilder.Unity
             Leaf = SelectTransform.Find("Leaf");
             EventBroadcaster = Leaf.GetComponent<EventBroadcaster>();
             EventBroadcaster.MouseDown.AddListener(OnMouseDownOnLeaf);
-            Lerper = GetComponent<Lerper>();
         }
 
         #endregion Unity Messages
@@ -35,21 +36,22 @@ namespace DeckBuilder.Unity
         {
             if (State == CardState.Idle)
             {
-                await Lerper
-                    .SetGetterFunction(() => SelectTransform.localPosition.y)
-                    .SetSetterFunction(f => SelectTransform.localPosition = Vector2.up * f)
-                    .SetLerpFunction(EasingFunction.EaseOutCubic)
-                    .Begin(SelectTransform.localPosition.y, 1, 0.25F)
-                    .Finished();
+                await SelectTransformTweener.Run(Vector2.zero, Vector2.up, 0.25F);
+
+                // await Tweener
+                //     .SetLerpFunction((out float value, float from, float to, float t) =>
+                //     {
+                //         value = EasingFunction.EaseInOutCubic(from, to, t);
+                //     })
+                //     .Begin(SelectTransform.localPosition.y, 1, 0.25F)
+                //     .Finished();
             }
             else if (State == CardState.Selected)
             {
-                await Lerper
-                    .SetGetterFunction(() => SelectTransform.localPosition.y)
-                    .SetSetterFunction(f => SelectTransform.localPosition = Vector2.up * f)
-                    .SetLerpFunction(EasingFunction.EaseOutCubic)
-                    .Begin(SelectTransform.localPosition.y, 0, 0.25F)
-                    .Finished();
+                // await Tweener
+                //     .SetLerpFunction(EasingFunction.EaseOutCubic)
+                //     .Begin(SelectTransform.localPosition.y, 0, 0.25F)
+                //     .Finished();
             }
 
             State = state;

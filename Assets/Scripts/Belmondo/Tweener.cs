@@ -1,10 +1,62 @@
-using System.Runtime.CompilerServices;
+#nullable enable
+
+using System;
+using System.Collections;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Belmondo
 {
-    public delegate T TweenerLerpFunction<T>(out T value, T from, T to, double t);
+    public enum TweenStatus
+    {
+        Stopped,
+        Running,
+        Finished,
+    }
 
+    public struct Tween<T>
+    {
+        private Func<T, T, float, T> _tweenDelegate;
+        private T _from;
+        private T _to;
+        private float _currentT;
+        private float _duration;
+        private TweenStatus _status;
+
+        public Task Run(T from, T to, float duration)
+        {
+            _from = from;
+            _to = to;
+            _duration = duration;
+            _status = TweenStatus.Running;
+
+            var self = this;
+
+            return new Task(() =>
+            {
+                while (self._status != TweenStatus.Finished) ;
+            });
+        }
+
+        public void Update(ref T value, Func<T, T, float, T> lerpFunction, float deltaTime)
+        {
+            if (_status != TweenStatus.Running || _currentT >= 1.0F)
+            {
+                return;
+            }
+
+            _currentT += deltaTime / _duration;
+            _currentT = Mathf.Clamp(_currentT, 0, 1);
+            value = lerpFunction(_from, _to, _currentT);
+        }
+    }
+}
+
+/*
+using System.Runtime.CompilerServices;
+
+namespace Belmondo
+{
     public enum TweenerState
     {
         NotYetStarted,
@@ -17,19 +69,19 @@ namespace Belmondo
         public T From;
         public T To;
         public TweenerState CurrentState;
-        public double CurrentT;
-        public double DurationSeconds;
+        public float CurrentT;
+        public float DurationSeconds;
     }
 
-    public class TweenerBuilder<T> : ITweener<T>
+    public class TweenerBuilder<T>
     {
         public TweenerState<T> State;
-        public ITweener<T>.LerpFunction LerpFunction;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Lerp(out T value, T from, T to, double t) => LerpFunction(out value, from, to, t);
+        public IValueTweener<T> CreateValueTweener()
+        {
+        }
 
-        public void Update(ref T value, double deltaTime)
+        public void Update(ref T value, float deltaTime)
         {
             if (State.CurrentState == TweenerState.Running)
             {
@@ -43,13 +95,13 @@ namespace Belmondo
             }
         }
 
-        public ITweener<T> SetLerpFunction(ITweener<T>.LerpFunction lerpFunction)
+        public ITweenerAPI<T> SetLerpFunction(ITweenerAPI<T>.LerpFunction lerpFunction)
         {
             LerpFunction = lerpFunction;
             return this;
         }
 
-        public ITweener<T> Begin(T from, T to, double durationSeconds)
+        public ITweenerAPI<T> Begin(T from, T to, float durationSeconds)
         {
             State = new TweenerState<T>
             {
@@ -62,13 +114,8 @@ namespace Belmondo
 
             return this;
         }
-
-        public async Task Finished()
-        {
-            await Task.Run(() =>
-            {
-                while (State.CurrentState != TweenerState.Finished) ;
-            });
-        }
     }
 }
+*/
+
+#nullable restore

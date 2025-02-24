@@ -1,10 +1,20 @@
+using System.Collections.Generic;
 using Belmondo;
 using UnityEngine;
 
 namespace DeckBuilder.Unity
 {
-    public class FloatTweenerComponent : MonoBehaviour
+    public class TweenerComponent : MonoBehaviour
     {
-        private TweenerBuilder<float> _tweenerBuilder;
+        private List<Tween<dynamic>> _tweeners;
+        private List<Tween<dynamic>> _fixedTweeners;
+
+        public void Update()
+        {
+            foreach (var tweener in _tweeners)
+            {
+                tweener.Update();
+            }
+        }
     }
 }
