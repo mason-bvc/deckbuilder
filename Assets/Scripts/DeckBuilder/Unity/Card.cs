@@ -27,7 +27,7 @@ namespace DeckBuilder.Unity
         [HideInInspector]
         public Tween<float> SelectTransformTween = new();
         [HideInInspector]
-        public HeldCard HeldCard;
+        public int HeldCardID;
         [HideInInspector]
         public CardState State;
 

@@ -10,5 +10,13 @@ namespace DeckBuilder
         {
             Cards = freshList;
         }
+
+        public readonly void GetHeldCardTypes(ICollection<CardType> cardTypes)
+        {
+            foreach (var heldCard in Cards)
+            {
+                cardTypes.Add(heldCard.CardType);
+            }
+        }
     }
 }

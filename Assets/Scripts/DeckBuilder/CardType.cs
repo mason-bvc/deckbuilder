@@ -5,6 +5,7 @@ namespace DeckBuilder
 {
     public struct CardType : IEquatable<CardType>
     {
+        // TODO: cache this statically
         public static IEnumerable<CardType> All
         {
             get
